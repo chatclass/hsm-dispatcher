@@ -31,7 +31,7 @@ export default class SchedulerBatch {
     SchedulerBatch.state = BatchState.STOP
   }
 
-  shouldStop(){
+  static shouldStop(){
     return SchedulerBatch.state === BatchState.STOP
   }
 
@@ -86,7 +86,7 @@ export default class SchedulerBatch {
   async dispatch(toRun: Schedule[]): Promise<{finished: boolean}> {
     logger.debug(`Dispatching schedules: ${toRun.length}`)
     for (const schedule of toRun) {
-      if(this.shouldStop()) {
+      if(SchedulerBatch.shouldStop()) {
         logger.debug('Stopping dispatch')
         return {finished: false} 
       }
@@ -99,7 +99,7 @@ export default class SchedulerBatch {
   async dryDispatch(toRun: Schedule[]): Promise<{finished: boolean}> {
     logger.debug(`Dispatching schedules: ${toRun.length}`)
     for (const schedule of toRun) {
-      if(this.shouldStop()) {
+      if(SchedulerBatch.shouldStop()) {
         logger.debug('Stopping dispatch')
         return {finished: false} 
       }

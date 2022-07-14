@@ -1,5 +1,4 @@
-import fs from "fs";
-import converter from "json-2-csv";
+import SchedulerBatch from "./batch";
 import { Config } from "./config";
 import GoogleSheets from "./gsheet";
 import { logger } from "./logger";
@@ -93,6 +92,11 @@ export async function DryRun(input: Input) {
   }
   for (const phone of input.phones) {
     // TODO: move rate limit to Nuhub class
+    if(SchedulerBatch.shouldStop()) 
+      return {
+        success: result.filter((message:Message) => message.status === 'succes').length,
+        errors: result.filter((message:Message) => message.status === 'error').length,
+      }
     const message = new Message({
       httpClient: client,
       courseId: input.courseId,

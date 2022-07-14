@@ -5,7 +5,8 @@ import GoogleSheets from "./gsheet";
 import { hsm } from "./hsm";
 import { logger } from "./logger";
 import { MetabaseRepo } from "./metabase";
-import { Run } from "./runner";
+import { DryRun, Run } from "./runner";
+import Wapp11 from "./wapp11";
 
 const METABASE_ID_REGEX = new RegExp(
   "https://metabase.chatclass.com.br/question/([0-9]*)(?=-)"
@@ -25,6 +26,8 @@ export default class Schedule {
   three: string;
   four?: string;
   metabaseCardId: string;
+  onboardingStatus: 'ONBOARDED' | 'NOT_ONBOARDED';
+  inactivityDays: number[] = [];
   phone_number: number[] = [];
   chatclass: number[];
 
@@ -40,6 +43,8 @@ export default class Schedule {
     this.four = row.var_4;
     this.metabaseCardId = row.metabase || "";
     this.status = row.status || "";
+    this.inactivityDays.push(...row.inactivity_days.split(',').map((numb: string) => Number(numb)));
+    this.onboardingStatus = row.onboarding_status;
     const date = row.schedule_date.split("-");
     const hour = row.schedule_hour.split("h");
     this.date = moment.utc(
@@ -60,22 +65,16 @@ export default class Schedule {
   }
 
   async load(metabase: MetabaseRepo) {
-    const result = this.metabaseCardId.match(METABASE_ID_REGEX);
-    if (!result || !result[1]) {
-      this.phone_number = [
-        ...this.metabaseCardId.split(",").map((phone) => Number(phone)),
-      ];
-      return;
-    }
-    await metabase
-      .getData({ metabaseCardId: result[1] })
-      .then((phones: any) => {
-        phones &&
-          phones.data.forEach((phone: { whatsapp_id: string }) => {
-            this.phone_number.push(Number(phone.whatsapp_id));
-          });
-      });
-  }
+    const wapp11 = new Wapp11()
+    const users = await wapp11.getUsers(
+      [this.courseId],
+      this.onboardingStatus,
+      this.inactivityDays
+    );
+    this.phone_number = [
+      ...users.map((user) => Number(user.whatsapp_id)),
+    ];
+}
 
   async run() {
     try {
@@ -107,4 +106,36 @@ export default class Schedule {
       await this.row.save();
     }
   }
+
+  async dryRun() {
+    try {
+      if (!this.one || !this.two || !this.three)
+        throw new Error(`Missing hsm variable: 
+          \n var_1: ${this.one} \n var_2: ${this.two} \n var_3: ${this?.three} \n var_4; ${this.four}`);
+      if (
+        this.status === "sent" ||
+        this.status === "error" ||
+        this.status !== ""
+      )
+        return;
+      await DryRun({
+        channel: this.channel,
+        instance: this.instance,
+        cliente: this.client,
+        courseId: this.courseId,
+        template: hsm(this.one, this.two, this.three, this?.four)[
+          this.template
+        ],
+        phones: [...this.phone_number],
+        chatclass: [...this.chatclass]
+      });
+      this.row.status = "sent";
+      await this.row.save();
+    } catch (error) {
+      console.error(error);
+      this.row.status = "error";
+      await this.row.save();
+    }
+  }
+
 }

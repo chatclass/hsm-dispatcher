@@ -23,7 +23,7 @@ app.post('/dryrun', (req, res) => {
     if(SchedulerBatch.isRunning()) return res.sendStatus(401);
     res.sendStatus(201)
     const batch = new SchedulerBatch();
-    batch.run({ startedAt: new Date() });
+    batch.dryRun({ startedAt: new Date() });
   } catch(error){
     logger.error('Unhandled error at dryrun', error)
     res.sendStatus(500)

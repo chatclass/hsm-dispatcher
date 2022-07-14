@@ -9,7 +9,8 @@ import Schedule from "./schedule";
 
 const SHEET_ID = Config.gsheet.sheetId;
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 export default class GoogleSheets {
   doc: GoogleSpreadsheet;
   sheet?: GoogleSpreadsheetWorksheet;

@@ -23,7 +23,7 @@ export class Message{
   template: any;
   httpClient: Nuhub;
   sentAt: Date;
-  status: 'succes' | 'error';
+  status: 'succes' | 'error' | 'not_sent';
   constructor(input: Input){
     Object.assign(this, {...input})
   }
@@ -32,7 +32,7 @@ export class Message{
     return this.httpClient
       .post(
         `/channel/internal/${this.instance}/${this.channel}`,
-        this.template(this.phone)
+        this.template.build(this.phone)
       )
       .then(async () => {
         this.status = 'succes';
@@ -43,5 +43,9 @@ export class Message{
         logger.error(`Sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
         return;
       });
+  }
+  drySend(){
+    this.status = 'not_sent'
+    logger.debug(`Dry sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
   }
 }

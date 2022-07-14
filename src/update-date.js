@@ -1,7 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const { parse } = require("json2csv");
-const converter = require("json-2-csv");
+import fs from "fs"
+import path from "path"
+import converter from "json-2-csv"
 
 function randomIntFromInterval(min, max) {
   // min and max included

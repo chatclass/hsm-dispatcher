@@ -89,6 +89,8 @@ export default class Schedule {
         this.status !== ""
       )
         return;
+      this.row.status = 'running';
+      await this.row.save();
       await Run({
         channel: this.channel,
         instance: this.instance,

@@ -2,7 +2,6 @@ import {
   GoogleSpreadsheet,
   GoogleSpreadsheetWorksheet
 } from "google-spreadsheet";
-import credenciais from "./gsheets-key.json";
 import { Config } from "./config";
 import { logger } from "./logger";
 import Schedule from "./schedule";
@@ -20,8 +19,8 @@ export default class GoogleSheets {
     await delay(1000)
     try {
       await this.doc.useServiceAccountAuth({
-        client_email: credenciais.client_email,
-        private_key: credenciais.private_key.replace(/\\n/g, "\n"),
+        client_email: Config.gsheet.credentials.client_email,
+        private_key: Config.gsheet.credentials.private_key.replace(/\\n/g, "\n"),
       });
       await this.doc.loadInfo();
       logger.debug(`Getting sheet: ${name}`)

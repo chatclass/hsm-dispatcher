@@ -142,9 +142,9 @@ export function hsm(
         },
       }),
     },
-    bei_editora: {
-      name: 'bei_editora',
-      build: (phone: number) => ({
+  bei_editora: {
+    name: 'bei_editora',
+    build: (phone: number) => ({
         wa_id: phone,
         type: 'template',
         template: {

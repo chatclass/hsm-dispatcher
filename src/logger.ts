@@ -3,7 +3,7 @@ import { Config } from './config'
 
 const { printf } = winston.format
 
-const formatDate = (date) => {
+const formatDate = (date: Date) => {
     const year = date.getFullYear()
     const month = `0${String(date.getMonth() + 1)}`.slice(-2)
     const day = `0${String(date.getDate())}`.slice(-2)
@@ -16,7 +16,7 @@ const formatDate = (date) => {
     }:${seconds < 10 ? `0${seconds}` : seconds}`
 }
 
-const logFormat = (env, appName) =>
+const logFormat = (env: string, appName: string) =>
     printf(({ level, message, timestamp, ...metadata }) => {
         let msg = `[${level}] ${formatDate(
             new Date(timestamp)
@@ -44,7 +44,7 @@ const winstonLogger = (({ env, appName }) => {
 })(Config)
 
 const logger = ((standardLogger, { env }) => {
-    const error = (message, ...args) => {
+    const error = (message: string, ...args: any[]) => {
         const mappedArgs = args.map((arg) => {
             if (arg?.isAxiosError)
                 return {

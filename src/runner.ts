@@ -12,7 +12,7 @@ type Input = {
   instance: string;
   cliente: string;
   courseId: string;
-  template: (phone: number) => any;
+  template: {name: string, build: (phone: number) => any};
   phones: number[];
   chatclass: number[];
 };
@@ -27,7 +27,7 @@ export async function Run(input: Input) {
   logger.debug('Batch data', {
     ...input,
     phones: input.phones.length,
-    template_name: input.template(12345).template.name,
+    template_name: input.template.name,
   });
   await delay(1000)
   const gsheet = new GoogleSheets();

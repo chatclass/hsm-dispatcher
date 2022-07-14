@@ -31,7 +31,8 @@ const Config = {
       logs: {
         name: envString('GSHEET_LOGS_TABLE', 'Resultados')
       }
-    }
+    },
+    credentials: JSON.parse(envString('GCP_CREDENTIALS', 'Resultados'))
   }
 }
 

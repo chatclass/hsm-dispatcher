@@ -21,7 +21,7 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 const client = new Nuhub();
 
-export async function Run(input: Input) {
+export async function Run(input: Input): Promise<{ success: number, errors: number}> {
   const result: any[] = [];
   logger.debug("Sending HSM batch");
   logger.debug('Batch data', {
@@ -93,7 +93,6 @@ export async function DryRun(input: Input) {
   }
   for (const phone of input.phones) {
     // TODO: move rate limit to Nuhub class
-    await delay(200)
     const message = new Message({
       httpClient: client,
       courseId: input.courseId,
@@ -108,5 +107,8 @@ export async function DryRun(input: Input) {
     result.push(message);
   }
   await Report.messages(gsheet.sheet, result)
-  return;
+  return { 
+    success: result.filter((message:Message) => message.status === 'succes').length,
+    errors: result.filter((message:Message) => message.status === 'error').length,
+  };
 }

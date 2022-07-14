@@ -91,7 +91,7 @@ export default class Schedule {
         return;
       this.row.status = 'running';
       await this.row.save();
-      await Run({
+      const result = await Run({
         channel: this.channel,
         instance: this.instance,
         cliente: this.client,
@@ -102,6 +102,8 @@ export default class Schedule {
         phones: [...this.phone_number],
         chatclass: [...this.chatclass]
       });
+      this.row.success = result.success;
+      this.row.status = result.errors;
       this.row.status = "sent";
       await this.row.save();
     } catch (error) {

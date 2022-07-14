@@ -1,8 +1,11 @@
 import { GoogleSpreadsheetRow } from "google-spreadsheet";
+import moment from "moment";
+import { Config } from "./config";
+import GoogleSheets from "./gsheet";
+import { hsm } from "./hsm";
+import { logger } from "./logger";
 import { MetabaseRepo } from "./metabase";
 import { Run } from "./runner";
-import { hsm } from "./hsm";
-import moment from "moment";
 
 const METABASE_ID_REGEX = new RegExp(
   "https://metabase.chatclass.com.br/question/([0-9]*)(?=-)"
@@ -47,8 +50,16 @@ export default class Schedule {
       : [];
   }
 
+  static async getSchedule(){
+    const g = new GoogleSheets();
+    logger.debug(`Starting gsheet tab: ${Config.gsheet.tables.schedules.name}`)
+    await g.start(Config.gsheet.tables.schedules.name);
+    logger.debug(`Table started: ${g.doc.title}`)
+    const schedules = await g.loadSchedules();
+    return schedules;
+  }
+
   async load(metabase: MetabaseRepo) {
-    console.log(`Status: ${this.status}`);
     const result = this.metabaseCardId.match(METABASE_ID_REGEX);
     if (!result || !result[1]) {
       this.phone_number = [

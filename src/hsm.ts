@@ -1,3 +1,29 @@
+//TODO: Encapsulate HSM creation to make new HSM register easier
+class Component {
+  type: "button" | "text";
+  sub_type?: "quick_reply";
+  index?: "0";
+  parameters?: {
+    type: "payload",
+    payload: string,
+  }[];
+}
+
+class HSM {
+ wa_id: string;
+  type: string;
+  template: {
+    namespace: string;
+    name: string;
+    language: {
+      policy: 'deterministic',
+      code: 'pt_BR'
+    }
+    components: Component[]
+  }
+}
+
+
 export function hsm(
   var1: string,
   var2: string,

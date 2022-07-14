@@ -10,7 +10,7 @@ class Component {
 }
 
 class HSM {
- wa_id: string;
+  wa_id: string;
   type: string;
   template: {
     namespace: string;
@@ -135,5 +135,43 @@ export function hsm(
         ],
       },
     }),
+    bei_editora: (phone: number) => ({
+      wa_id: phone,
+      type: 'template',
+      template: {
+        namespace: '5e66109c_b0b8_4ac2_b86f_bd9f6db2fbf6',
+        name: 'onboard_new_user_beta4',
+        language: {
+          policy: 'deterministic',
+          code: 'pt_BR',
+        },
+        components: [
+          {
+            type: 'body',
+            parameters: [
+              {
+                type: 'text',
+                text: 'a Bei Editora',
+              },
+              {
+                type: 'text',
+                text: 'para fazer o curso TAL',
+              },
+            ],
+          },
+          {
+            type: 'button',
+            sub_type: 'quick_reply',
+            index: '0',
+            parameters: [
+              {
+                type: 'payload',
+                payload: 'command:hashtag_do_curso',
+              },
+            ],
+          },
+        ],
+      },
+    })
   };
 }

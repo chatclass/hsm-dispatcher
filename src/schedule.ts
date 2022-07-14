@@ -74,6 +74,8 @@ export default class Schedule {
     this.phone_number = [
       ...users.map((user) => Number(user.whatsapp_id)),
     ];
+    this.row.total = this.phone_number.length;
+    await this.row.save();
 }
 
   async run() {

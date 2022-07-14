@@ -15,7 +15,6 @@ export class MetabaseWebservice {
       baseURL: this.metabaseConfig.baseUrl,
       timeout: this.metabaseConfig.timeout,
     });
-    console.log(this.metabaseConfig);
   }
 
   private async getSessionToken(): Promise<any> {

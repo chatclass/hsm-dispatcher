@@ -51,6 +51,22 @@ export default class SchedulerBatch {
     logger.debug("Finished");
   }
 
+  async dryRun(data: { startedAt: Date }) {
+    logger.debug("Starting new batch");
+    if( SchedulerBatch.isRunning() ) { 
+      logger.debug("One batch is alreadying running");
+      return;
+    }
+    this.startedAt = data.startedAt;
+    BatchQueue.push(this);
+    logger.debug("Getting schedules data");
+    const toRun = await this.schedulerListToRun();
+    const result = await this.dryDispatch(toRun);
+    logger.debug(`Dispatching result`, result)
+    BatchQueue.pop();
+    logger.debug("Finished");
+  }
+
   async schedulerListToRun(){
     const schedules = await Schedule.getSchedule();
     logger.debug(`Filtering schedules: ${schedules.length}`);
@@ -79,5 +95,19 @@ export default class SchedulerBatch {
     }
     return {finished: true} 
   }
+
+  async dryDispatch(toRun: Schedule[]): Promise<{finished: boolean}> {
+    logger.debug(`Dispatching schedules: ${toRun.length}`)
+    for (const schedule of toRun) {
+      if(this.shouldStop()) {
+        logger.debug('Stopping dispatch')
+        return {finished: false} 
+      }
+      logger.debug(`Running schedule:\ninstance:${schedule.instance}\ntemplate_name:${schedule.template}`)
+      await schedule.dryRun();
+    }
+    return {finished: true} 
+  }
+
 }
 

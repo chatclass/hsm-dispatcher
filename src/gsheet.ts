@@ -1,6 +1,6 @@
 import {
-    GoogleSpreadsheet,
-    GoogleSpreadsheetWorksheet
+  GoogleSpreadsheet,
+  GoogleSpreadsheetWorksheet
 } from "google-spreadsheet";
 import credenciais from "../gsheets-key.json";
 import { Config } from "./config";
@@ -9,7 +9,7 @@ import Schedule from "./schedule";
 
 const SHEET_ID = Config.gsheet.sheetId;
 
-const delay =( ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 export default class GoogleSheets {
   doc: GoogleSpreadsheet;
   sheet?: GoogleSpreadsheetWorksheet;

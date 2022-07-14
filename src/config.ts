@@ -19,7 +19,7 @@ const Config = {
   wap11: {
     database: {
       uri: envString('WAPP11_CONNECTION_STRING'),
-      name: envString('WAP11_DATABASE_NAME')
+      name: envString('WAPP11_DATABASE_NAME')
     }
   },
   gsheet: {

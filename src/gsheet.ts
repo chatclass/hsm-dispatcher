@@ -2,7 +2,7 @@ import {
   GoogleSpreadsheet,
   GoogleSpreadsheetWorksheet
 } from "google-spreadsheet";
-import credenciais from "../gsheets-key.json";
+import credenciais from "./gsheets-key.json";
 import { Config } from "./config";
 import { logger } from "./logger";
 import Schedule from "./schedule";

@@ -4,6 +4,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
+    "rootDir": "src",
     "baseUrl": "src",
     "allowJs": true,
     "outDir": "dist",

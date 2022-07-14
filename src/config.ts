@@ -10,6 +10,7 @@ function envString(envName: string, defaultValue?: string) {
 
 const Config = {
   appName: 'hsm-dispatcher',
+  uri_token: process.env.URI_TOKEN,
   env: process.env.NODE_ENV,
   port: process.env.PORT,
   nuhub: {

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { Config } from "config";
+import { Config } from "./config";
 
 export default class Nuhub {
   private client: AxiosInstance;

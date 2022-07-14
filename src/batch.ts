@@ -3,7 +3,7 @@ import { logger } from "./logger";
 import { MetabaseRepo } from "./metabase";
 import Schedule from "./schedule";
 
-const BatchQueue = [];
+const BatchQueue: any[] = [];
 
 enum BatchState {
   START = 'START',

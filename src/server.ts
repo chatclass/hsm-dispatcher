@@ -6,24 +6,26 @@ import { logger } from "./logger";
 
 const app = express();
 
-app.post('/run', (req, res) => {
+app.post('/run', async (req, res) => {
   try{
     if(SchedulerBatch.isRunning()) return res.sendStatus(401);
     res.sendStatus(201)
     const batch = new SchedulerBatch();
-    batch.run({ startedAt: new Date() });
+    await batch.run({ startedAt: new Date() });
+    SchedulerBatch.setToStartState()
   } catch(error){
     logger.error('Unhandled error at run', error)
     res.sendStatus(500)
   }
 })
 
-app.post('/dryrun', (req, res) => {
+app.post('/dryrun', async (req, res) => {
   try{
     if(SchedulerBatch.isRunning()) return res.sendStatus(401);
     res.sendStatus(201)
     const batch = new SchedulerBatch();
-    batch.dryRun({ startedAt: new Date() });
+    await batch.dryRun({ startedAt: new Date() });
+    SchedulerBatch.setToStartState()
   } catch(error){
     logger.error('Unhandled error at dryrun', error)
     res.sendStatus(500)

@@ -22,6 +22,10 @@ export default class SchedulerBatch {
     this.metabase = new MetabaseRepo();
   }
 
+  static setToStartState(){
+    SchedulerBatch.state = BatchState.START
+  }
+
   static isRunning(){
     if(BatchQueue.length > 0) return true;
     return false

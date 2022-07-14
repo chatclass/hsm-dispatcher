@@ -89,7 +89,7 @@ export default class Schedule {
         this.status !== ""
       )
         return;
-      this.row.status = 'running';
+      this.row.status = "running";
       await this.row.save();
       const result = await Run({
         channel: this.channel,

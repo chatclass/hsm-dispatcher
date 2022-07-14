@@ -92,11 +92,13 @@ export async function DryRun(input: Input) {
   }
   for (const phone of input.phones) {
     // TODO: move rate limit to Nuhub class
-    if(SchedulerBatch.shouldStop()) 
+    if(SchedulerBatch.shouldStop()) {
+      await Report.messages(gsheet.sheet, result)
       return {
         success: result.filter((message:Message) => message.status === 'succes').length,
         errors: result.filter((message:Message) => message.status === 'error').length,
       }
+    }
     const message = new Message({
       httpClient: client,
       courseId: input.courseId,

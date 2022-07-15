@@ -28,7 +28,7 @@ export default class GoogleSheets {
         (sheet) => sheet.title === name
       )[0];
     } catch (error) {
-      logger.error('Starting google sheets');
+      logger.error('Starting google sheets', error);
     }
   }
   async loadSchedules() {

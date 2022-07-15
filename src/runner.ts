@@ -5,6 +5,7 @@ import { logger } from "./logger";
 import { Message } from "./message";
 import Nuhub from "./nuhub";
 import Report from "./report";
+import WhatsApp from "./whatsapp";
 
 type Input = {
   channel: string;
@@ -18,7 +19,7 @@ type Input = {
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-const client = new Nuhub();
+const client = new WhatsApp();
 
 export async function Run(input: Input): Promise<{ success: number, errors: number}> {
   const result: any[] = [];

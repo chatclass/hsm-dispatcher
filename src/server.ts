@@ -8,14 +8,14 @@ const app = express();
 
 app.post('/run', async (req, res) => {
   try{
-    if(SchedulerBatch.isRunning()) return res.sendStatus(401);
+    if(SchedulerBatch.isRunning()) return res.sendStatus(400);
     res.sendStatus(201)
     const batch = new SchedulerBatch();
     await batch.run({ startedAt: new Date() });
     SchedulerBatch.setToStartState()
   } catch(error){
+		SchedulerBatch.setToStartState()
     logger.error('Unhandled error at run', error)
-    res.sendStatus(500)
   }
 })
 
@@ -27,8 +27,9 @@ app.post('/dryrun', async (req, res) => {
     await batch.dryRun({ startedAt: new Date() });
     SchedulerBatch.setToStartState()
   } catch(error){
+		SchedulerBatch.setToStartState()
+		console.log(error)
     logger.error('Unhandled error at dryrun', error)
-    res.sendStatus(500)
   }
 })
 

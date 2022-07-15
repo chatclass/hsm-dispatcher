@@ -10,7 +10,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "build": "rimraf dist && tsc -p tsconfig.json",
     "dev": "tsx watch src/index.ts",
-    "debug": "node --inspect -r ts-node/register index.ts"
+    "debug": "node --inspect -r ts-node/register src/index.ts"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

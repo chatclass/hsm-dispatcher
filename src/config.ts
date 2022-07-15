@@ -33,7 +33,12 @@ const Config = {
       }
     },
     credentials: JSON.parse(envString('GCP_CREDENTIALS', 'Resultados'))
-  }
+  },
+	whatsapp: {
+		beieditora: {
+			key: envString('WHATSAPP_BEI_KEY')
+		}
+	}
 }
 
 export { Config }

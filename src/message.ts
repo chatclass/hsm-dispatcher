@@ -1,14 +1,12 @@
-import { AxiosInstance } from "axios";
-import GoogleSheets from "./gsheet";
 import { logger } from "./logger";
-import Nuhub from "./nuhub";
+import WhatsApp from "./whatsapp";
 
 type Input = {
   courseId: string;
   client: string;
   phone: number;
   template: any;
-  httpClient: Nuhub;
+  httpClient: WhatsApp;
   sentAt: Date;
   channel: string;
   instance: string;
@@ -21,9 +19,10 @@ export class Message{
   client: string;
   phone: number;
   template: any;
-  httpClient: Nuhub;
+  httpClient: WhatsApp;
   sentAt: Date;
   status: 'succes' | 'error' | 'not_sent';
+	error: string;
   constructor(input: Input){
     Object.assign(this, {...input})
   }
@@ -31,16 +30,16 @@ export class Message{
     logger.debug(`Sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
     return this.httpClient
       .post(
-        `/channel/internal/${this.instance}/${this.channel}`,
         this.template.build(this.phone)
       )
       .then(async () => {
         this.status = 'succes';
         return;
       })
-      .catch(async () => {
+      .catch(async (err) => {
         this.status = 'error';
         logger.error(`Sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
+				this.error(err.response)
         return;
       });
   }

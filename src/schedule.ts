@@ -26,10 +26,13 @@ export default class Schedule {
   three: string;
   four?: string;
   metabaseCardId: string;
+	datasource: string;
   onboardingStatus: 'ONBOARDED' | 'NOT_ONBOARDED';
   inactivityDays: number[] = [];
   phone_number: number[] = [];
   chatclass: number[];
+	gsheet_id: string;
+	users: string;
 
   constructor(row: GoogleSpreadsheetRow) {
     this.row = row;
@@ -42,11 +45,14 @@ export default class Schedule {
     this.three = row.var_3;
     this.four = row.var_4;
     this.metabaseCardId = row.metabase || "";
+		this.datasource = row.datasource || 'wapp11'
+		this.gsheet_id = row.gsheet_id;
     this.status = row.status || "";
-    this.inactivityDays.push(...row.inactivity_days.split(',').map((numb: string) => Number(numb)));
+		this.users = row.users;
+    row.inactivity_days && this.inactivityDays.push(...row.inactivity_days.split(',').map((numb: string) => Number(numb)));
     this.onboardingStatus = row.onboarding_status;
-    const date = row.schedule_date.split("-");
-    const hour = row.schedule_hour.split("h");
+    const date = row.schedule_date && row.schedule_date.split("-");
+    const hour = row.schedule_hour && row.schedule_hour.split("h");
     this.date = moment.utc(
       Date.UTC(2022, Number(date[0]) - 1, Number(date[1]), hour[0])
     );
@@ -59,24 +65,32 @@ export default class Schedule {
     const g = new GoogleSheets();
     logger.debug(`Starting gsheet tab: ${Config.gsheet.tables.schedules.name}`)
     await g.start(Config.gsheet.tables.schedules.name);
-    logger.debug(`Table started: ${g.doc.title}`)
     const schedules = await g.loadSchedules();
     return schedules;
   }
 
-  async load(metabase: MetabaseRepo) {
+  async load() {
+    this.phone_number = this.datasource === 'gsheet' ? 
+			await this.getSheetUsers() : await this.getWapp11Users()
+    this.row.total = this.phone_number.length;
+    await this.row.save();
+	}
+
+	async getWapp11Users(){
     const wapp11 = new Wapp11()
     const users = await wapp11.getUsers(
       [this.courseId],
       this.onboardingStatus,
       this.inactivityDays
     );
-    this.phone_number = [
+		return [
       ...users.map((user) => Number(user.whatsapp_id)),
     ];
-    this.row.total = this.phone_number.length;
-    await this.row.save();
-}
+	}
+
+	async getSheetUsers(){
+		return this.users.split(';').map((phone) => Number(phone));
+	}
 
   async run() {
     try {

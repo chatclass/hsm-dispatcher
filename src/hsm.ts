@@ -175,7 +175,7 @@ export function hsm(
               parameters: [
                 {
                   type: 'payload',
-                  payload: `command:${var4}`,
+                  payload: var4,
                 },
               ],
             },

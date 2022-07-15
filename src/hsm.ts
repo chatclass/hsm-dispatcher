@@ -1,26 +1,26 @@
-class Component {
-  type: "button" | "text";
-  sub_type?: "quick_reply";
-  index?: "0";
-  parameters?: {
-    type: "payload",
-    payload: string,
-  }[];
-}
+// class Component {
+//   type: "button" | "text";
+//   sub_type?: "quick_reply";
+//   index?: "0";
+//   parameters?: {
+//     type: "payload",
+//     payload: string,
+//   }[];
+// }
 
-class HSM {
-  wa_id: string;
-  type: string;
-  template: {
-    namespace: string;
-    name: string;
-    language: {
-      policy: 'deterministic',
-      code: 'pt_BR'
-    }
-    components: Component[]
-  }
-}
+// class HSM {
+//   wa_id: string;
+//   type: string;
+//   template: {
+//     namespace: string;
+//     name: string;
+//     language: {
+//       policy: 'deterministic',
+//       code: 'pt_BR'
+//     }
+//     components: Component[]
+//   }
+// }
 
 export function hsm(
   var1: string,
@@ -142,9 +142,9 @@ export function hsm(
         },
       }),
     },
-  bei_editora: {
-    name: 'bei_editora',
-    build: (phone: number) => ({
+    bei_editora: {
+      name: 'bei_editora',
+      build: (phone: number) => ({
         wa_id: phone,
         type: 'template',
         template: {

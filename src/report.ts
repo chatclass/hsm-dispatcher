@@ -1,5 +1,5 @@
 import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
-import { logger } from "logger";
+import { logger } from "./logger";
 import { Message } from "./message";
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))

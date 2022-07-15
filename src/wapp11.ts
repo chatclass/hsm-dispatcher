@@ -38,7 +38,6 @@ export default class Wapp11 {
   getClient(){
     if(!Wapp11.client){
       const connectionString = this.makeConnectionString();
-      console.log(connectionString)
       Wapp11.client = new Pool({
         connectionString: connectionString
       })

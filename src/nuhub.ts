@@ -1,10 +1,11 @@
 import axios, { AxiosInstance } from "axios";
+import { Config } from "./config";
 
 export default class Nuhub {
   private client: AxiosInstance;
   constructor(){
     this.client = axios.create({
-      baseURL: "http://localhost:3100/v1",
+      baseURL: Config.nuhub.baseUrl,
     });
   }
   post(url: string, data?: any){

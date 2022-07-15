@@ -74,6 +74,8 @@ export default class Schedule {
     this.phone_number = [
       ...users.map((user) => Number(user.whatsapp_id)),
     ];
+    this.row.total = this.phone_number.length;
+    await this.row.save();
 }
 
   async run() {
@@ -87,7 +89,9 @@ export default class Schedule {
         this.status !== ""
       )
         return;
-      await Run({
+      this.row.status = "running";
+      await this.row.save();
+      const result = await Run({
         channel: this.channel,
         instance: this.instance,
         cliente: this.client,
@@ -98,6 +102,8 @@ export default class Schedule {
         phones: [...this.phone_number],
         chatclass: [...this.chatclass]
       });
+      this.row.success = result.success;
+      this.row.status = result.errors;
       this.row.status = "sent";
       await this.row.save();
     } catch (error) {

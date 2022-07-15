@@ -160,11 +160,11 @@ export function hsm(
               parameters: [
                 {
                   type: 'text',
-                  text: 'a Bei Editora',
+                  text: 'a Beĩ Renda Familiar',
                 },
                 {
                   type: 'text',
-                  text: 'para fazer o curso TAL',
+                  text: 'para fazer o curso *Como organizar a renda familiar para viver melhor*',
                 },
               ],
             },
@@ -175,7 +175,7 @@ export function hsm(
               parameters: [
                 {
                   type: 'payload',
-                  payload: 'command:hashtag_do_curso',
+                  payload: `command:${var4}`,
                 },
               ],
             },

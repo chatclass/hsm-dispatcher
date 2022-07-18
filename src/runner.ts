@@ -71,9 +71,13 @@ export async function Run(input: Input): Promise<{ success: number, errors: numb
     } catch(error){
       message.status = 'error_sending'
     }
+    try {
+      await Report.messages(gsheet.sheet, [message])
+    } catch(error){
+      logger.debug('Error reporting message')
+    }
     result.push(message);
   }
-  await Report.messages(gsheet.sheet, result)
   return { 
     success: result.filter((message:Message) => message.status === 'succes').length,
     errors: result.filter((message:Message) => message.status === 'error').length,
@@ -83,6 +87,7 @@ export async function Run(input: Input): Promise<{ success: number, errors: numb
 export async function DryRun(input: Input) {
   const result: any[] = [];
   logger.debug("Sending HSM batch");
+  console.log(input.template)
   logger.debug('Batch data', {
     ...input,
     phones: input.phones.length,
@@ -127,7 +132,7 @@ export async function DryRun(input: Input) {
     message.drySend();
     result.push(message);
   }
-  await Report.messages(gsheet.sheet, result)
+  // await Report.messages(gsheet.sheet, result)
   return { 
     success: result.filter((message:Message) => message.status === 'succes').length,
     errors: result.filter((message:Message) => message.status === 'error').length,

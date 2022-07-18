@@ -331,6 +331,44 @@ export function hsm(
         },
       }),
     },
+    activity_reminder_bei: {
+      name: 'activity_reminder_bei',
+			config: {
+        baseURL: 'https://waba.360dialog.io/v1',
+				headers: { 'D360-API-KEY' : Config.whatsapp.beieditora.key },
+			},
+      build: (phone: number) => ({
+        to: phone,
+        type: "template",
+        template: {
+          namespace: "5e66109c_b0b8_4ac2_b86f_bd9f6db2fbf6",
+          name: "activity_reminder",
+          language: {
+            policy: "deterministic",
+            code: "pt_BR",
+          },
+          components: [
+            {
+              type: "body",
+              parameters: [
+                {
+                  type: "text",
+                  text: var1,
+                },
+                {
+                  type: "text",
+                  text: var2,
+                },
+                {
+                  type: "text",
+                  text: var3,
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    },
     bei_editora: {
       name: 'bei_editora',
 			config: {

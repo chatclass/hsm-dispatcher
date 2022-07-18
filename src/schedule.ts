@@ -70,10 +70,42 @@ export default class Schedule {
   }
 
   async load() {
-    this.phone_number = this.datasource === 'gsheet' ? 
-			await this.getSheetUsers() : await this.getWapp11Users()
-    this.row.total = this.phone_number.length;
-    await this.row.save();
+		switch(this.datasource){
+			case 'gsheet':
+				this.phone_number = await this.getSheetUsers();
+				this.row.total = this.phone_number.length;
+				await this.row.save();
+				return;
+			case 'wap11':
+				this.phone_number = await this.getWapp11Users();
+				this.row.total = this.phone_number.length;
+				await this.row.save();
+				return;
+			case 'metabase':
+				this.phone_number = await this.getMetabaseUsers();
+				this.row.total = this.phone_number.length;
+				await this.row.save();
+				return;
+		}
+	}
+
+	async getMetabaseUsers(){
+		const metabase: MetabaseRepo = new MetabaseRepo();
+		const result = this.metabaseCardId.match(METABASE_ID_REGEX);
+    if (!result || !result[1]) {
+      this.phone_number = [
+        ...this.metabaseCardId.split(",").map((phone) => Number(phone)),
+      ];
+      return;
+    }
+    return await metabase
+      .getData({ metabaseCardId: result[1] })
+      .then((phones: any) => {
+        return phones ?
+          phones.data.forEach((phone: { whatsapp_id: string }) => {
+            this.phone_number.push(Number(phone.whatsapp_id));
+          }) : []
+      });
 	}
 
 	async getWapp11Users(){
@@ -116,7 +148,7 @@ export default class Schedule {
         phones: [...this.phone_number],
         chatclass: [...this.chatclass]
       });
-      this.row.success = result.success;
+      this.row.success = result?.success || result?.success;
       this.row.status = result.errors;
       this.row.status = "sent";
       await this.row.save();
@@ -138,6 +170,8 @@ export default class Schedule {
         this.status !== ""
       )
         return;
+			this.row.status = "dry run";
+			await this.row.save();
       await DryRun({
         channel: this.channel,
         instance: this.instance,
@@ -149,6 +183,8 @@ export default class Schedule {
         phones: [...this.phone_number],
         chatclass: [...this.chatclass]
       });
+			this.row.success = "-";
+      this.row.status = "-";
       this.row.status = "sent";
       await this.row.save();
     } catch (error) {

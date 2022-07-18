@@ -413,6 +413,55 @@ export function hsm(
           ],
         },
       })
+    },
+    course_start_bei: {
+      name: 'course_start',
+      config: {
+        baseURL: 'https://waba.360dialog.io/v1',
+        headers: { 'D360-API-KEY' : Config.whatsapp.beieditora.key },
+      },
+      build: (phone: number) => ({
+        to: phone,
+        type: "template",
+        template: {
+          namespace: '5e66109c_b0b8_4ac2_b86f_bd9f6db2fbf6',
+          name: "course_start",
+          language: {
+            policy: "deterministic",
+            code: "pt_BR",
+          },
+          components: [
+            {
+              type: "body",
+              parameters: [
+                {
+                  type: "text",
+                  text: var1,
+                },
+                {
+                  type: "text",
+                  text: var2,
+                },
+                {
+                  type: "text",
+                  text: var3,
+                },
+              ],
+            },
+            {
+              type: "button",
+              sub_type: "quick_reply",
+              index: "0",
+              parameters: [
+                {
+                  type: "payload",
+                  payload: var4,
+                },
+              ],
+            },
+          ],
+        },
+      }),
     }
   }
 }

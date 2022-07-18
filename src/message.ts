@@ -28,6 +28,7 @@ export class Message{
   }
   async send(){
     logger.debug(`Sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
+    console.log(this.template)
     return this.httpClient
       .post(
         this.phone, this.template
@@ -46,6 +47,7 @@ export class Message{
   }
   drySend(){
     this.status = 'not_sent'
+    console.log(this.template)
     logger.debug(`Dry sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
   }
 }

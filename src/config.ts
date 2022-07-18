@@ -46,6 +46,9 @@ const Config = {
 		},
 		cultura: {
 			key: envString('WHATSAPP_CULTURA_KEY')
+		},
+    gsh: {
+			key: envString('WHATSAPP_GSH_KEY')
 		}
 	}
 }

@@ -255,6 +255,44 @@ export function hsm(
         },
       }),
     },
+		activity_reminder_gsh: {
+      name: 'activity_reminder',
+			config: {
+				baseURL: 'https://graph.facebook.com/v12.0/2783566445047226',
+				headers: { 'Authorization' : Config.whatsapp.gsh.key },
+			},
+      build: (phone: number) => ({
+        to: phone,
+        type: "template",
+				"messaging_product": "whatsapp",
+        template: {
+          name: "activity_reminder",
+          language: {
+            policy: "deterministic",
+            code: "pt_BR",
+          },
+          components: [
+            {
+              type: "body",
+              parameters: [
+                {
+                  type: "text",
+                  text: var1,
+                },
+                {
+                  type: "text",
+                  text: var2,
+                },
+                {
+                  type: "text",
+                  text: var3,
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    },
 		activity_reminder_nine_nine: {
       name: 'activity_reminder',
 			config: {

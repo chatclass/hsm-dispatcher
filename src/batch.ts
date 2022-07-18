@@ -78,7 +78,7 @@ export default class SchedulerBatch {
       return schedule.date.isBefore(moment()) && !schedule.status;
     });
     logger.debug(`Remaining schedules: ${toRun.length}`);
-    await Promise.all(toRun.map((schedule) => schedule.load(this.metabase)));
+    await Promise.all(toRun.map((schedule) => schedule.load()));
     const toRunTable = toRun.map((schedule) => ({
       name: schedule.client,
       hour: schedule.date,

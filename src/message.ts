@@ -21,7 +21,7 @@ export class Message{
   template: any;
   httpClient: WhatsApp;
   sentAt: Date;
-  status: 'succes' | 'error' | 'not_sent';
+  status: 'succes' | 'error' | 'not_sent' | 'error_sending';
 	error: string;
   constructor(input: Input){
     Object.assign(this, {...input})
@@ -30,7 +30,7 @@ export class Message{
     logger.debug(`Sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
     return this.httpClient
       .post(
-        this.template.build(this.phone)
+        this.phone, this.template
       )
       .then(async () => {
         this.status = 'succes';
@@ -39,7 +39,8 @@ export class Message{
       .catch(async (err) => {
         this.status = 'error';
         logger.error(`Sending to ${this.phone} in instance ${this.instance} and channel ${this.channel}`)
-				this.error(err.response)
+				console.error(err.response.data)
+				this.error = err.response?.data
         return;
       });
   }

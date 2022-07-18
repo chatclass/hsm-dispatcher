@@ -90,22 +90,19 @@ export default class Schedule {
 	}
 
 	async getMetabaseUsers(){
+    logger.debug(`Getting metabase user ${this.metabaseCardId}`)
 		const metabase: MetabaseRepo = new MetabaseRepo();
 		const result = this.metabaseCardId.match(METABASE_ID_REGEX);
     if (!result || !result[1]) {
-      this.phone_number = [
-        ...this.metabaseCardId.split(",").map((phone) => Number(phone)),
-      ];
-      return;
+      throw new Error(`Incorrect metabase url format ${this.metabaseCardId}`)
     }
-    return await metabase
+    const users = await metabase
       .getData({ metabaseCardId: result[1] })
-      .then((phones: any) => {
-        return phones ?
-          phones.data.forEach((phone: { whatsapp_id: string }) => {
-            this.phone_number.push(Number(phone.whatsapp_id));
-          }) : []
-      });
+    const phones = users?.data ? users.data.map((phone: { whatsapp_id: string }) => {
+      return Number(phone.whatsapp_id);
+    }) : []
+    logger.debug(`Metabase ${this.metabaseCardId} returned ${phones.length} users`)
+    return phones;
 	}
 
 	async getWapp11Users(){
@@ -185,7 +182,7 @@ export default class Schedule {
       });
 			this.row.success = "-";
       this.row.status = "-";
-      this.row.status = "sent";
+      this.row.status = "dry sent";
       await this.row.save();
     } catch (error) {
       console.error(error);

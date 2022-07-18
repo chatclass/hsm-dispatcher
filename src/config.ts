@@ -37,6 +37,15 @@ const Config = {
 	whatsapp: {
 		beieditora: {
 			key: envString('WHATSAPP_BEI_KEY')
+		},
+		phomenta: {
+			key: envString('WHATSAPP_PHOMENTA_KEY')
+		},
+		ninenine: {
+			key: envString('WHATSAPP_99_KEY')
+		},
+		cultura: {
+			key: envString('WHATSAPP_CULTURA_KEY')
 		}
 	}
 }

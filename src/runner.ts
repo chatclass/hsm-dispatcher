@@ -49,6 +49,13 @@ export async function Run(input: Input): Promise<{ success: number, errors: numb
   for (const phone of input.phones) {
     // TODO: move rate limit to Nuhub class
     await delay(200)
+		if(SchedulerBatch.shouldStop()) {
+      await Report.messages(gsheet.sheet, result)
+      return {
+        success: result.filter((message:Message) => message.status === 'succes').length,
+        errors: result.filter((message:Message) => message.status === 'error').length,
+      }
+    }
     const message = new Message({
       httpClient: client,
       courseId: input.courseId,
@@ -59,11 +66,18 @@ export async function Run(input: Input): Promise<{ success: number, errors: numb
       sentAt: new Date(),
       instance: input.instance
     })
-    await message.send();
+    try {
+      await message.send();
+    } catch(error){
+      message.status = 'error_sending'
+    }
     result.push(message);
   }
   await Report.messages(gsheet.sheet, result)
-  return;
+  return { 
+    success: result.filter((message:Message) => message.status === 'succes').length,
+    errors: result.filter((message:Message) => message.status === 'error').length,
+  };
 }
 
 export async function DryRun(input: Input) {

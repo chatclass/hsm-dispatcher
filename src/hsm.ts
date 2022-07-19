@@ -217,6 +217,44 @@ export function hsm(
         },
       }),
     },
+		activity_reminder_vila_brasil: {
+      name: 'activity_reminder',
+			config: {
+				baseURL: 'https://waba.360dialog.io/v1',
+				headers: { 'D360-API-KEY' : Config.whatsapp.vila.key },
+			},
+      build: (phone: number) => ({
+        to: phone,
+        type: "template",
+        template: {
+          namespace: "c2b73b20_1ea1_4044_bea8_49cb50712de1",
+          name: "activity_reminder",
+          language: {
+            policy: "deterministic",
+            code: "pt_BR",
+          },
+          components: [
+            {
+              type: "body",
+              parameters: [
+                {
+                  type: "text",
+                  text: var1,
+                },
+                {
+                  type: "text",
+                  text: var2,
+                },
+                {
+                  type: "text",
+                  text: var3,
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    },
 		activity_reminder_cultura: {
       name: 'activity_reminder',
 			config: {

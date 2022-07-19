@@ -49,6 +49,9 @@ const Config = {
 		},
     gsh: {
 			key: envString('WHATSAPP_GSH_KEY')
+		},
+    vila: {
+			key: envString('WHATSAPP_VILA_KEY')
 		}
 	}
 }
